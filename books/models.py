@@ -11,7 +11,7 @@ class Book(models.Model):
     spend_cate = models.CharField(max_length=11, blank=True, verbose_name='소비종류',choices=SpendChoice.choices)
     money = models.IntegerField(verbose_name="금액")
     spend_date = models.DateField(verbose_name="소비날짜")
-    bio = models.TextField(verbose_name="상세내용")
+    bio = models.TextField(null=True,blank=True,verbose_name="상세내용")
     user = models.ForeignKey("users.User",on_delete=models.CASCADE,verbose_name="고객")
     created_at = models.DateTimeField(auto_now_add=True,verbose_name='등록날짜')
     updated_at = models.DateTimeField(auto_now=True,verbose_name='수정날짜')
