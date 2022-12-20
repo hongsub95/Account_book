@@ -18,5 +18,5 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account_book/api',include('books.urls',namespace='account-book'))
+    path('account_book/api/',include('books.urls',namespace='account-book'))
 ]

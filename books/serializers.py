@@ -1,7 +1,18 @@
 from rest_framework import serializers
 from . import models as Book_models
 
-class BookListSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book_models.Book
-        fields = ["name","user","spend_date","spend_cate","money","bio",]
+        fields = ["title","user","spend_date","spend_cate","money","bio",]
+        ordering=['-pk']
+
+class BookCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book_models.Book
+        fields = ["title","user","spend_date","spend_cate","money","bio",]
+
+class BookPatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book_models.Book
+        fields = ["title","user","spend_date","spend_cate","money","bio",]

@@ -4,11 +4,11 @@ from django.db import models
 
 #가계부 모델
 class Book(models.Model):
-    class SpendChoice(models.TextField):
+    class SpendChoice(models.TextChoices):
         Expenditure = "Expenditure", "지출"
         Income = "Income", "수입"
-    name = models.CharField(max_length=30,verbose_name="제목")
-    spend_cate = models.CharField(max_length=10, blank=True, verbose_name='소비종류',choices=SpendChoice.choices)
+    title = models.CharField(max_length=30,verbose_name="제목")
+    spend_cate = models.CharField(max_length=11, blank=True, verbose_name='소비종류',choices=SpendChoice.choices)
     money = models.IntegerField(verbose_name="금액")
     spend_date = models.DateField(verbose_name="소비날짜")
     bio = models.TextField(verbose_name="상세내용")
