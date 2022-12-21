@@ -12,7 +12,8 @@ class customUserAdmin(UserAdmin):
                     "name",
                     "gender",
                     "birthday",
-                    "password"
+                    "password",
+                    "is_staff",
                 ),
             },
         ),
@@ -21,4 +22,5 @@ class customUserAdmin(UserAdmin):
         "name",
         "gender",
         "birthday",
+        "is_staff",
     )

@@ -11,7 +11,7 @@ from . import serializers as Book_serializers
 
 #가계부 생성,리스트 View
 class SpendCreateListAPIView(generics.ListCreateAPIView):
-    
+
     permission_classes = [Book_permissions.IsBookUserOrAdminUser]
     
     # 가계부 주인의 쿼리 가져오기
