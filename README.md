@@ -26,7 +26,38 @@ ex) http://127.0.0.1:8000/가계부/user_id:1/가계부_id:3/ => http://127.0.0.
 하지만 가계부 상세내역 url이 permission으로 인해 자기 주인 아니면 접근을 못하기에 단축url도 접근이 안됨 \
 => 이건 추후에 수정 할 예정(아마 permission을 수정하던지, 다른곳을 손 봐야 할 것 같다)
 
+## 코드 리뷰
+### 가계부 Create, List view
+    class SpendCreateListAPIView(generics.ListCreateAPIView): 
 
+    permission_classes = [Book_permissions.IsBookUserOrAdminUser] 
+    
+    def get_queryset(self):
+        user_id = self.kwargs["user_id"]
+        return Book_models.Book.objects.filter(user=user_id).all()
+    
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return Book_serializers.BookCreateSerializer
+        else:
+            return Book_serializers.BookSerializer
+### 가계부 retrieve, update, delete view
+    class SpendRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    
+    permission_classes = [Book_permissions.IsBookUserOrAdminUser]
+    
+    def get_queryset(self):
+        book_id = self.kwargs["pk"]
+        user_id = self.kwargs["user_id"]
+        book = Book_models.Book.objects.filter(user=user_id).all()
+        return book.filter(pk=book_id)
+    
+    
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            return Book_serializers.BookPatchSerializer
+        else:
+            return Book_serializers.BookSerializer
 
 
 
