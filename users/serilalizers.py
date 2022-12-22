@@ -44,4 +44,4 @@ class RegisterSerializer(serializers.ModelSerializer):
 class AuthUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User_models.User
-        fields = ("username","name","email","gender","is_staff")
+        fields = ("pk","username","name","email","gender","is_staff")

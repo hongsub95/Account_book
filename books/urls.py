@@ -9,5 +9,5 @@ urlpatterns = [
    path('admin/api/',views.AdminSpendCreateListAPIView.as_view(),name="admin_book_api"),
    path('admin/api/<int:pk>/',views.AdminSpendRetrieveUpdateDestroyView.as_view(),name="admin_book_api_item"),
    path('api/shorten_url/',views.url_shortner),
-   path('api/<new_url>/',views.redirect_url)
+   path('<new_url>/',views.redirect_url)
 ]

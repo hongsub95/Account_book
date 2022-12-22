@@ -11,5 +11,5 @@ class IsBookUserOrAdminUser(BasePermission):
         if request.user and request.user.is_staff:
             return bool(True)
         user_id = view.kwargs.get('user_id', None)
-        book = Book_models.Book.objects.filter(user=user_id).all()[0]
-        return bool(request.user and book.user == request.user)
+        return bool(request.user and user_id == request.user.pk)
+        

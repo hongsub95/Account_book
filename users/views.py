@@ -39,17 +39,14 @@ class RegisterAPIView(APIView):
 class AuthUserAPIView(APIView):
     
     # user정보 가져오기
-    
     def get(self,request):
         try:
-            print(request.COOKIES)
             access = request.COOKIES["access"]
             payload = jwt.decode(access,SECRET_KEY,algorithms=['HS256'])
             pk = payload["user_id"]
             user = get_object_or_404(User_models.User,pk=pk)
             serializer = User_serializers.AuthUserSerializer(instance=user)
             return Response(serializer.data,status=status.HTTP_200_OK)
-        
         except(jwt.exceptions.ExpiredSignatureError):  # 토큰 만료 시 토큰 갱신
             data = {'refresh': request.COOKIES.get('refresh', None)}
             serializer = TokenRefreshSerializer(data=data)

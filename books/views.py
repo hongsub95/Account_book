@@ -1,8 +1,6 @@
 import random
 import string
-import datetime
-from django.shortcuts import render
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
@@ -87,14 +85,15 @@ class AdminSpendRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView)
 # 원래 url -> 단축url로 변경
 @api_view(["POST"])
 def url_shortner(request):
+    # 기본 DB에 저장되어 있는 경우
     try:
         url = Book_models.UrlShortner.objects.get(original_url=request.data["original_url"])
         serializer = Book_serializers.UrlSerializer(url)
         return Response(serializer.data)
-    except:
+    except: #변환해야하는 url의 경우
         serializer = Book_serializers.UrlSerializer(data=request.data)
         if serializer.is_valid():
-            shorten_url = SITE_URL + ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(7))
+            shorten_url = SITE_URL + ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(7)) #대소문자,숫자 조합된 단축url
             serializer.save(shorten_url=shorten_url)
             return Response(serializer.data)
         return Response({"message":"Not a Valid serializer"})
@@ -105,7 +104,8 @@ def redirect_url(request,new_url):
     url = SITE_URL + new_url
     obj = Book_models.UrlShortner.objects.get(shorten_url=url)
     if timelimit(obj.created_at):
-        return HttpResponseRedirect(obj.original_url)
+        return HttpResponseRedirect(obj.original_url) # 단축url(shorten url)에 접근했을때 기본url(original url)로 redirect
     else:
+        obj.delete() #시간초과된 단축url은 삭제
         return Response({"message":"시간이 초과 되었습니다. 새로운 url을 발급 받길 바랍니다."})
     
