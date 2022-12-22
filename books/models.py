@@ -15,3 +15,9 @@ class Book(models.Model):
     user = models.ForeignKey("users.User",on_delete=models.CASCADE,verbose_name="고객")
     created_at = models.DateTimeField(auto_now_add=True,verbose_name='등록날짜')
     updated_at = models.DateTimeField(auto_now=True,verbose_name='수정날짜')
+
+# 단축 url
+class UrlShortner(models.Model):
+    original_url = models.URLField(max_length=256)
+    shorten_url = models.URLField(default='')
+    created_at = models.DateTimeField(auto_now_add=True,verbose_name="생성날짜")

@@ -1,10 +1,18 @@
+import random
+import string
+import datetime
 from django.shortcuts import render
+from django.http import HttpResponseRedirect,HttpResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import api_view
 from . import permissions as Book_permissions
 from . import models as Book_models
 from . import serializers as Book_serializers
+from config.settings import SITE_URL
+from .services import timelimit
+
 
 
 # 사용자용 가계부 (가계부 주인 혹은 관리자만 접근 가능)
@@ -74,3 +82,30 @@ class AdminSpendRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView)
             return Book_serializers.BookPatchSerializer
         else:
             return Book_serializers.BookSerializer
+
+
+# 원래 url -> 단축url로 변경
+@api_view(["POST"])
+def url_shortner(request):
+    try:
+        url = Book_models.UrlShortner.objects.get(original_url=request.data["original_url"])
+        serializer = Book_serializers.UrlSerializer(url)
+        return Response(serializer.data)
+    except:
+        serializer = Book_serializers.UrlSerializer(data=request.data)
+        if serializer.is_valid():
+            shorten_url = SITE_URL + ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(7))
+            serializer.save(shorten_url=shorten_url)
+            return Response(serializer.data)
+        return Response({"message":"Not a Valid serializer"})
+
+# 단축 url -> 원래url로 변경
+@api_view(["GET"])
+def redirect_url(request,new_url):
+    url = SITE_URL + new_url
+    obj = Book_models.UrlShortner.objects.get(shorten_url=url)
+    if timelimit(obj.created_at):
+        return HttpResponseRedirect(obj.original_url)
+    else:
+        return Response({"message":"시간이 초과 되었습니다. 새로운 url을 발급 받길 바랍니다."})
+    

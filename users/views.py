@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer,TokenRefreshSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 import jwt
 from . import models as User_models
@@ -29,6 +28,7 @@ class RegisterAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
+            # 쿠키에 access,refresh토큰을 저장 ("access":access_token,"refresh":refresh_token)
             res.set_cookie("access", access_token, httponly=True)
             res.set_cookie("refresh", refresh_token, httponly=True)
             return res
@@ -42,6 +42,7 @@ class AuthUserAPIView(APIView):
     
     def get(self,request):
         try:
+            print(request.COOKIES)
             access = request.COOKIES["access"]
             payload = jwt.decode(access,SECRET_KEY,algorithms=['HS256'])
             pk = payload["user_id"]

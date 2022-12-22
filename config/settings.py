@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_URL = "http://127.0.0.1:8000/"
 
 # Application definition
 
@@ -41,7 +42,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = ["books.apps.BooksConfig","users.apps.UsersConfig","seed.apps.SeedConfig"]
 
-THIRD_APPS = ['rest_framework',]
+THIRD_APPS = ['rest_framework','rest_framework_simplejwt']
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_APPS
 
@@ -126,7 +127,6 @@ REST_FRAMEWORK = {
 }
 
 #simplejwt 설정
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30), 
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -162,9 +162,9 @@ SIMPLE_JWT = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
