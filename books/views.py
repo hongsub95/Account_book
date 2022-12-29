@@ -18,7 +18,7 @@ from .services import timelimit
 #가계부 생성,리스트 View
 class SpendCreateListAPIView(generics.ListCreateAPIView):
 
-    permission_classes = [Book_permissions.IsBookUserOrAdminUser]
+    permission_classes = [Book_permissions.IsLoginUserOrAdminUser]
     
     # 가계부 주인의 쿼리 가져오기
     def get_queryset(self):
@@ -34,7 +34,7 @@ class SpendCreateListAPIView(generics.ListCreateAPIView):
 #가계부 조회,수정,삭제 view
 class SpendRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     
-    permission_classes = [Book_permissions.IsBookUserOrAdminUser]
+    permission_classes = [Book_permissions.IsLoginUserOrAdminUser]
     
     def get_queryset(self):
         book_id = self.kwargs["pk"]
@@ -48,6 +48,7 @@ class SpendRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             return Book_serializers.BookPatchSerializer
         else:
             return Book_serializers.BookSerializer
+
 
 
 
@@ -108,4 +109,6 @@ def redirect_url(request,new_url):
     else:
         obj.delete() #시간초과된 단축url은 삭제
         return Response({"message":"시간이 초과 되었습니다. 새로운 url을 발급 받길 바랍니다."})
+
+
     
