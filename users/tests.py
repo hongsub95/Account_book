@@ -9,24 +9,25 @@ class UserTestCase(APITestCase):
         self.factory = APIRequestFactory()
         self.register_url = reverse("user-api:register_api")
         self.login_url = reverse("user-api:login_api")
+    
+    def test_get_token(self):
         self.user_data={
-            "username":"user1",
-            "name":"user1",
-            "email":"user1@user1.com",
-            "password":"user1",
+            "username":"testuser1",
+            "name":"testuser111",
+            "email":"testuser1@testuser1.com",
+            "password":"testuser1",
             "gender":"M"
         }
-    def test_register(self):
         self.client.post(self.register_url,data=self.user_data)
-    def test_login(self):
         self.access_token=self.client.post(
             self.login_url,{
                 "username":self.user_data.get("username"),
                 "password":self.user_data.get("password")
             }
-        ).data
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
-        print(self.access_token)
+        ).data.get("token")
+        self.client.credentials(
+            HTTP_AUTHORIZATION=f"Bearer {self.access_token['access']}"
+            )
         
         
 
